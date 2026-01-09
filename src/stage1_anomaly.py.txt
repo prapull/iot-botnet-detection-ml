@@ -1,0 +1,53 @@
+"""
+Stage 1: Anomaly Detection Module (Conceptual)
+
+This module represents the first stage of a hybrid IoT botnet
+detection system.
+
+Purpose:
+- Filter suspicious traffic early
+- Reduce unnecessary computation for benign data
+
+Training is assumed to be performed offline.
+"""
+
+import numpy as np
+
+
+class Stage1AnomalyDetector:
+    """
+    Conceptual wrapper for Stage-1 anomaly detection.
+
+    In the actual system, this stage consists of:
+    - Autoencoder trained on benign traffic
+    - Isolation Forest for statistical outlier detection
+    """
+
+    def __init__(self):
+        # Placeholder attributes (trained models exist offline)
+        self.autoencoder_loaded = True
+        self.isolation_forest_loaded = True
+
+    def detect(self, sample):
+        """
+        Detect whether a network traffic sample is anomalous.
+
+        Input:
+            sample: numeric feature vector
+
+        Output:
+            True  -> anomalous / suspicious
+            False -> benign
+        """
+
+        # Conceptual reconstruction error
+        reconstruction_error = np.mean(sample)
+
+        # Conceptual Isolation Forest score
+        isolation_score = np.std(sample)
+
+        # Hybrid decision logic (OR condition)
+        if reconstruction_error > 0.5 or isolation_score > 0.3:
+            return True
+
+        return False

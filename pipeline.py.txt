@@ -1,0 +1,75 @@
+"""
+Hybrid IoT Botnet Detection Pipeline (Inference Flow)
+
+This script demonstrates the logical flow of a two-stage
+machine learning system for IoT botnet detection.
+
+Training is assumed to be performed offline.
+"""
+
+import numpy as np
+
+
+def stage1_anomaly_detection(sample):
+    """
+    Stage 1: Anomaly Detection (Conceptual)
+
+    Input:
+        sample: feature vector of network traffic
+
+    Output:
+        True  -> suspicious traffic
+        False -> benign traffic
+    """
+
+    # Placeholder logic (represents Autoencoder + Isolation Forest)
+    anomaly_score = np.mean(sample)
+
+    if anomaly_score > 0.5:
+        return True
+    return False
+
+
+def stage2_attack_classification(sample):
+    """
+    Stage 2: Attack Classification (Conceptual)
+
+    Input:
+        sample: feature vector flagged as anomalous
+
+    Output:
+        attack label
+    """
+
+    # Placeholder logic (represents RF + XGB + Meta Logistic Regression)
+    possible_attacks = [
+        "mirai_udp",
+        "mirai_syn",
+        "gafgyt_tcp",
+        "gafgyt_udp"
+    ]
+
+    # Dummy decision for demonstration
+    return possible_attacks[int(np.sum(sample)) % len(possible_attacks)]
+
+
+def hybrid_predict(sample):
+    """
+    Full Hybrid Pipeline
+    """
+
+    is_anomaly = stage1_anomaly_detection(sample)
+
+    if not is_anomaly:
+        return "Benign Traffic"
+
+    attack_type = stage2_attack_classification(sample)
+    return f"Attack Detected: {attack_type}"
+
+
+if __name__ == "__main__":
+    # Example usage with dummy input
+    dummy_sample = np.random.rand(20)
+
+    result = hybrid_predict(dummy_sample)
+    print("Prediction Result:", result)
