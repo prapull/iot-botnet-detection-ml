@@ -1,63 +1,27 @@
-# IoT Botnet Detection using Machine Learning
+# IoT-Guard: Two-Stage Hierarchical Ensemble for IoT Botnet Detection
 
 ## Overview
-This project demonstrates a hybrid machine learning pipeline for detecting botnet activity in IoT network traffic.
-The system is designed to first filter suspicious traffic using anomaly detection and then classify malicious traffic
-using ensemble-based machine learning models.
-
-The goal of this repository is to explain the **architecture, workflow, and inference logic** of the system in a clear
-and practical way.
-
----
+IoT-Guard is a research project proposing a hierarchical ML framework for detecting 
+and classifying IoT botnet attacks with cross-device generalization.
 
 ## System Architecture
-The detection pipeline consists of two stages:
+**Stage 1: Binary Detection**
+- XGBoost classifier separates benign from attack traffic
+- Evaluated under 9-fold Leave-One-Device-Out (LODO) protocol
 
-**Stage 1: Anomaly Detection**
-- Identifies suspicious network traffic using unsupervised learning.
-- Helps reduce unnecessary computation by filtering benign traffic early.
+**Stage 2: Fine-Grained Classification**  
+- 1D-CNN processes attack-confirmed traffic
+- Classifies into Mirai/Gafgyt attack subtypes
 
-**Stage 2: Attack Classification**
-- Applies ensemble-based classification only on flagged traffic.
-- Improves robustness on imbalanced IoT security data.
-
----
-
-## Key Concepts Used
-- Unsupervised anomaly detection
-- Feature compression / representation learning
-- Ensemble machine learning models
-- Handling imbalanced classification problems
-- Pipeline-based ML system design
-
----
+## Results
+- 99.99% accuracy on N-BaIoT dataset (9 IoT devices)
+- Cross-device generalization via LODO evaluation protocol
 
 ## Dataset
-This project is based on the **N-BaIoT dataset**, which contains network traffic data from IoT devices under normal
-and botnet attack conditions.
+N-BaIoT — network traffic from 9 real IoT devices infected with Mirai and Gafgyt botnets.
 
-> The dataset is publicly available and is **not included** in this repository.
+## Status
+Research paper submitted for publication. Code withheld pending review.
 
----
-
-## Note on Training
-Model training was performed offline due to high computational cost and large dataset size.
-This repository focuses on demonstrating the **inference flow and system design**, rather than full model training.
-
----
-
-## Repository Purpose
-This repository is intended for:
-- Learning and demonstration
-- Understanding hybrid ML pipelines
-
-It is **not intended** to be a one-click reproduction of research experiments.
-
----
-
-## Technologies Used
-- Python
-- Scikit-learn
-- TensorFlow / Keras
-- Ensemble Machine Learning Models
-
+## Technologies
+Python, XGBoost, TensorFlow/Keras, Scikit-learn
