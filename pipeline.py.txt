@@ -1,75 +1,47 @@
 """
-Hybrid IoT Botnet Detection Pipeline (Inference Flow)
-
-This script demonstrates the logical flow of a two-stage
-machine learning system for IoT botnet detection.
-
-Training is assumed to be performed offline.
+IoT-Guard: Two-Stage Hierarchical Ensemble Pipeline (Inference Flow)
+Stage 1: XGBoost binary detection (benign vs attack)
+Stage 2: 1D-CNN fine-grained attack classification
+Training performed offline. Code withheld pending publication.
 """
-
 import numpy as np
 
+ATTACK_LABELS = [
+    "mirai_udp", "mirai_syn", "mirai_ack", "mirai_scan", "mirai_udpplain",
+    "gafgyt_tcp", "gafgyt_udp", "gafgyt_http", "gafgyt_junk", "gafgyt_scan"
+]
 
-def stage1_anomaly_detection(sample):
+def stage1_binary_detection(sample):
     """
-    Stage 1: Anomaly Detection (Conceptual)
-
-    Input:
-        sample: feature vector of network traffic
-
-    Output:
-        True  -> suspicious traffic
-        False -> benign traffic
+    Stage 1: XGBoost Binary Classifier
+    Input: 115 statistical flow features (normalized)
+    Output: True -> attack traffic, False -> benign
+    Evaluated under 9-fold Leave-One-Device-Out (LODO) protocol
     """
-
-    # Placeholder logic (represents Autoencoder + Isolation Forest)
-    anomaly_score = np.mean(sample)
-
-    if anomaly_score > 0.5:
-        return True
-    return False
-
+    # Placeholder (represents trained XGBoost with scale_pos_weight balancing)
+    score = np.mean(sample)
+    return score > 0.5
 
 def stage2_attack_classification(sample):
     """
-    Stage 2: Attack Classification (Conceptual)
-
-    Input:
-        sample: feature vector flagged as anomalous
-
-    Output:
-        attack label
+    Stage 2: 1D-CNN Fine-Grained Classifier
+    Input: attack-confirmed feature vector
+    Output: specific Mirai/Gafgyt attack subtype
     """
+    # Placeholder (represents trained 1D-CNN)
+    return ATTACK_LABELS[int(np.sum(sample)) % len(ATTACK_LABELS)]
 
-    # Placeholder logic (represents RF + XGB + Meta Logistic Regression)
-    possible_attacks = [
-        "mirai_udp",
-        "mirai_syn",
-        "gafgyt_tcp",
-        "gafgyt_udp"
-    ]
-
-    # Dummy decision for demonstration
-    return possible_attacks[int(np.sum(sample)) % len(possible_attacks)]
-
-
-def hybrid_predict(sample):
+def iotguard_predict(sample):
     """
-    Full Hybrid Pipeline
+    Full IoT-Guard Two-Stage Pipeline
     """
-
-    is_anomaly = stage1_anomaly_detection(sample)
-
-    if not is_anomaly:
+    is_attack = stage1_binary_detection(sample)
+    if not is_attack:
         return "Benign Traffic"
-
     attack_type = stage2_attack_classification(sample)
     return f"Attack Detected: {attack_type}"
 
-
 if __name__ == "__main__":
-    # Example usage with dummy input
-    dummy_sample = np.random.rand(20)
-
-    result = hybrid_predict(dummy_sample)
-    print("Prediction Result:", result)
+    dummy_sample = np.random.rand(115)  # 115 N-BaIoT features
+    result = iotguard_predict(dummy_sample)
+    print("IoT-Guard Prediction:", result)
